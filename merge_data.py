@@ -41,6 +41,8 @@ df_hydro = df_hydro.resample('M').mean()
 df_hydro.drop(columns=['year'], inplace=True)
 
 df_merged_master = pd.merge(df_resampled, df_hydro, left_index=True, right_index=True)
+df_merged_master_annual = df_merged_master.resample('A').mean()
 df_merged_master.to_csv('data/merged_master.csv')
+df_merged_master_annual.to_csv('data/merged_master_annual.csv')
 
 

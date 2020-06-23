@@ -1,5 +1,6 @@
 import pandas as pd
 from fbprophet import Prophet
+import matplotlib.pyplot as plt
 
 df = pd.read_csv('data/merged_master.csv', index_col=0)
 
@@ -13,7 +14,7 @@ for lake in lakes:
     lake_levels.reset_index(inplace=True, drop=True)
 
     # Initialize the Prophet
-    m = Prophet()
+    m = Prophet(changepoint_prior_scale=0.05, changepoint_range=0.9)
     m.fit(lake_levels)
 
     # Extend dataframe in to the future
@@ -23,6 +24,9 @@ for lake in lakes:
     future = m.predict(future_lake_levels)
     future['y'] = lake_levels['y']
     future.to_csv(f'data/predictions_{lake}.csv')
+
+    fig = m.plot(future, xlabel='', ylabel='Lake Level (m)', figsize=(12, 3))
+    plt.show()
 
 
 
