@@ -6,7 +6,7 @@ df = pd.read_csv('data/merged_master.csv', index_col=0)
 
 lakes = ['Superior', 'Michigan-Huron', 'St. Clair', 'Erie', 'Ontario']
 
-for lake in lakes:
+for lake in lakes[:1]:
     # Extract targets to predict
     lake_levels = pd.DataFrame()
     lake_levels['y'] = df[lake]
@@ -14,7 +14,10 @@ for lake in lakes:
     lake_levels.reset_index(inplace=True, drop=True)
 
     # Initialize the Prophet
-    m = Prophet(changepoint_prior_scale=0.05, changepoint_range=0.9)
+    m = Prophet(changepoint_prior_scale=35,
+                changepoint_range=0.9,
+                n_changepoints=35,
+                seasonality_prior_scale=5)
     m.fit(lake_levels)
 
     # Extend dataframe in to the future
